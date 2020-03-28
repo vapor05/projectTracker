@@ -2,6 +2,8 @@
 CREATE TABLE users (
     user_id serial PRIMARY KEY,
     user_name varchar(80),
+    password varchar(100),
+    email varchar(100),
     create_date timestamp DEFAULT CURRENT_TIMESTAMP,
     create_user varchar(80) DEFAULT CURRENT_USER
 );

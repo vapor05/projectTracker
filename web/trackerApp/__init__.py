@@ -1,8 +1,27 @@
+import os
 from flask import Flask
-
-from trackerApp.core.views import core_views
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "mySecertKey"
 
-app.register_blueprint(core_views)
+# dialect+driver://username:password@host:port/database
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://%s:%s@%s/%s" \
+    % (os.environ.get("DB_USER", ""), os.environ.get("DB_PASSWORD", ""),
+     os.environ.get("DB_HOST", ""), os.environ.get("DB_NAME"))
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# psql nbocchini -d projectTracker -f create_tables.sql
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "users.login"
+
+from trackerApp.core.views import core
+from trackerApp.users.views import users
+
+app.register_blueprint(core)
+app.register_blueprint(users)
