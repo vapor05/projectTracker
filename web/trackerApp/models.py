@@ -61,11 +61,46 @@ class Project(db.Model):
     description = db.Column(db.Text)
     create_date  = db.Column(db.DateTime, default=datetime.utcnow)
 
+    tasks = db.relationship("Task", backref="tasks", lazy=True)
+
     def __init__(self, title, description, user_id):
         self.title = title
         self.description = description
         self.author_id = user_id
         # new projects always start as 'Proposed'
+        self.status_id = 1
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def find_by_title(cls, title):
+        return cls.query.filter_by(title=title).first()
+
+
+class Task(db.Model):
+    __tablename__ = "tasks"
+
+    projects = db.relationship(Project)
+    users = db.relationship(User)
+    status = db.relationship(Status)
+
+    task_id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, db.ForeignKey("projects.project_id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    assigned_id = db.Column(db.Integer)
+    status_id = db.Column(db.Integer, db.ForeignKey("status.status_id"), nullable=False)
+    title = db.Column(db.String(200))
+    description = db.Column(db.Text)
+    create_date  = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, title, description, project_id, user_id):
+        self.title = title
+        self.description = description
+        self.project_id = project_id
+        self.author_id = user_id
+        # new tasks always start as 'Proposed'
         self.status_id = 1
 
     def save_to_db(self):

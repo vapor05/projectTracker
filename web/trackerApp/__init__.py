@@ -21,7 +21,9 @@ login_manager.login_view = "users.login"
 from trackerApp.core.views import core
 from trackerApp.users.views import users
 from trackerApp.projects.views import projects
+from trackerApp.tasks.views import tasks
 
 app.register_blueprint(core)
 app.register_blueprint(users)
 app.register_blueprint(projects)
+app.register_blueprint(tasks)

@@ -20,3 +20,9 @@ def create_project():
             project.save_to_db()
             return redirect(url_for("users.home"))
     return render_template("projects/create.html", form=form)
+
+@projects.route("/project_overview/<title>")
+@login_required
+def project_overview(title):
+    project = Project.find_by_title(title)
+    return render_template("projects/project_overview.html", project=project)

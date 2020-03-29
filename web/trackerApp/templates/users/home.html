@@ -12,7 +12,9 @@
     <p>Here are your current projects being tracked</p>
     {% for project in projects %}
         <ul>
-            <p>{{ project.title }}</p>
+            {{ project.title }}  <form action="{{ url_for('projects.project_overview', title=project.title) }}" method="GET">
+                <input type="submit" value="See Project Overview">
+                </form>
         </ul>
     {% endfor %}
 </div>
