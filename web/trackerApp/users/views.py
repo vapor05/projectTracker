@@ -39,7 +39,11 @@ def login():
             next = request.args.get("next")
 
             if next == None or not next[0] == "/":
-                next = url_for("core.index")
+                next = url_for("users.home")
 
             return redirect(next)
     return render_template("users/login.html", form=form)
+
+@users.route("/home", methods=["GET", "POST"])
+def home():
+    return render_template("users/home.html")

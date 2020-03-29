@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<div>
+    <h1>Home page for {{ current_user.username }}</h1>
+    <p>See acount info</p>
+    <a href="#">Account</a>
+</div>
+
+<div>
+    <h2>Current Projects</h2>
+    <p>Here are your current projects being tracked</p>
+</div>
+<br>
+<div>
+    <a href="#">Start a new Project</a>
+    <a href="#">Search for a Project</a>
+</div>
+
+{% endblock %}
