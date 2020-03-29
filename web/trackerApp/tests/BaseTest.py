@@ -13,7 +13,12 @@ class BaseTest(unittest.TestCase):
         app.config["DEBUG"] = False
         app.config['WTF_CSRF_ENABLED'] = False
         basedir = os.path.abspath(os.path.dirname(__file__))
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, TEST_DB)
+        datadir = os.path.join(basedir, "testdata")
+
+        if not os.path.exists(datadir):
+            os.mkdir(datadir)
+
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(datadir, TEST_DB)
         self.app = app.test_client()
         db.drop_all()
         db.create_all()

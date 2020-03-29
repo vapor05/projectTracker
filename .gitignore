@@ -7,3 +7,6 @@ env/
 # coverage tool outputs
 .coverage
 htmlcov/
+
+# unit test data
+testdata/
