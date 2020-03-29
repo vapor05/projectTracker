@@ -33,3 +33,15 @@ class BaseTest(unittest.TestCase):
     def create_project(self, title, description, user_id):
         project = Project(title=title, description=description, user_id=user_id)
         project.save_to_db()
+
+    def register_user(self, user_name, email, password):
+        return self.app.post("/register", data=dict(user_name=user_name,
+            email=email, password=password, pass_confirm=password),
+            follow_redirects=True)
+
+    def login_user(self, email, password):
+        return self.app.post("/login", data=dict(email=email,
+            password=password), follow_redirects=True)
+
+    def logout_user(self):
+        return self.app.get("/logout", follow_redirects=True)
