@@ -14,14 +14,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# psql nbocchini -d projectTracker -f create_tables.sql
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "users.login"
 
 from trackerApp.core.views import core
 from trackerApp.users.views import users
+from trackerApp.projects.views import projects
 
 app.register_blueprint(core)
 app.register_blueprint(users)
+app.register_blueprint(projects)

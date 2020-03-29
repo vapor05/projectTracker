@@ -2,7 +2,7 @@
 {% block content %}
 
 <div>
-    <h1>Home page for {{ current_user.username }}</h1>
+    <h1>Home page for {{ current_user.user_name }}</h1>
     <p>See acount info</p>
     <a href="#">Account</a>
 </div>
@@ -10,11 +10,19 @@
 <div>
     <h2>Current Projects</h2>
     <p>Here are your current projects being tracked</p>
+    {% for project in projects %}
+        <ul>
+            <p>{{ project.title }}</p>
+        </ul>
+    {% endfor %}
 </div>
 <br>
 <div>
-    <a href="#">Start a new Project</a>
+    <a href="{{ url_for('projects.create_project') }}">Start a new Project</a>
     <a href="#">Search for a Project</a>
+    <br>
+    <br>
+    <a href="{{ url_for('users.logout') }}">Logout</a>
 </div>
 
 {% endblock %}

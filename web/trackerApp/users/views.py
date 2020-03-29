@@ -1,7 +1,6 @@
 from flask import render_template, url_for, redirect, Blueprint, request
 from flask_login import login_user, current_user, logout_user, login_required
-from trackerApp import db
-from trackerApp.models import User
+from trackerApp.models import User, Project
 from trackerApp.users.forms import LoginForm, RegistrationForm
 
 users = Blueprint("users", __name__)
@@ -20,8 +19,7 @@ def register():
                     user_name = form.user_name.data,
                     password=form.password.data)
 
-        db.session.add(user)
-        db.session.commit()
+        user.save_to_db()
 
         return redirect(url_for("users.login"))
     return render_template("users/register.html", form=form)
@@ -45,5 +43,7 @@ def login():
     return render_template("users/login.html", form=form)
 
 @users.route("/home", methods=["GET", "POST"])
+@login_required
 def home():
-    return render_template("users/home.html")
+    projects = Project.query.filter_by(author_id = current_user.user_id)
+    return render_template("users/home.html", projects=projects)
