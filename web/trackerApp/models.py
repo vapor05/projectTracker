@@ -47,7 +47,18 @@ class Status(db.Model):
     projects = db.relationship("Project", backref="status_group", lazy=True)
 
 
-class Project(db.Model):
+class WorkLevel():
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def find_by_title(cls, title, user_id):
+        return cls.query.filter(cls.title==title, cls.author_id==user_id).first()
+
+
+class Project(db.Model, WorkLevel):
     __tablename__ = "projects"
 
     user = db.relationship(User)
@@ -70,16 +81,8 @@ class Project(db.Model):
         # new projects always start as 'Proposed'
         self.status_id = 1
 
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
 
-    @classmethod
-    def find_by_title(cls, title, user_id):
-        return cls.query.filter(cls.title==title, cls.author_id==user_id).first()
-
-
-class Task(db.Model):
+class Task(db.Model, WorkLevel):
     __tablename__ = "tasks"
 
     project = db.relationship(Project)
@@ -95,6 +98,8 @@ class Task(db.Model):
     description = db.Column(db.Text)
     create_date  = db.Column(db.DateTime, default=datetime.utcnow)
 
+    items = db.relationship("Item", backref="items", lazy=True)
+
     def __init__(self, title, description, project_id, user_id):
         self.title = title
         self.description = description
@@ -103,10 +108,27 @@ class Task(db.Model):
         # new tasks always start as 'Proposed'
         self.status_id = 1
 
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
 
-    @classmethod
-    def find_by_title(cls, title, user_id):
-        return cls.query.filter(cls.title==title, cls.author_id==user_id).first()
+class Item(db.Model, WorkLevel):
+    __tablename__ = "items"
+
+    user = db.relationship(User)
+    status = db.relationship(Status)
+    task = db.relationship(Task)
+
+    item_id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("tasks.task_id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    status_id = db.Column(db.Integer, db.ForeignKey("status.status_id"), nullable=False)
+    assigned_id = db.Column(db.Integer)
+    title = db.Column(db.String(200))
+    description = db.Column(db.Text)
+    create_date  = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, title, description, task_id, user_id):
+        self.title = title
+        self.description = description
+        self.task_id = task_id
+        self.author_id = user_id
+        # new items always start as 'Proposed'
+        self.status_id = 1

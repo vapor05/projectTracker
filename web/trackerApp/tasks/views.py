@@ -13,8 +13,8 @@ def add_task(project_title):
 
     if form.validate_on_submit():
 
-        if Task.find_by_title(form.title.data, user_id=current_user.user_id) == None:
-            project = Project.find_by_title(project_title, user_id=current_user.user_id)
+        if Task.find_by_title(form.title.data, current_user.user_id) == None:
+            project = Project.find_by_title(project_title, current_user.user_id)
             task = Task(title=form.title.data, description=form.description.data,
                 project_id=project.project_id, user_id=current_user.user_id)
             task.save_to_db()
