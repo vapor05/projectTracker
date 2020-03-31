@@ -14,7 +14,7 @@ def create_project():
 
     if form.validate_on_submit():
 
-        if Project.find_by_title(form.title.data) == None:
+        if Project.find_by_title(form.title.data, current_user.user_id) == None:
             project = Project(title = form.title.data,
                 description = form.description.data, user_id = current_user.user_id)
             project.save_to_db()
@@ -24,5 +24,5 @@ def create_project():
 @projects.route("/project_overview/<title>", methods=["GET", "POST"])
 @login_required
 def overview(title):
-    project = Project.find_by_title(title)
+    project = Project.find_by_title(title, current_user.user_id)
     return render_template("projects/overview.html", project=project)

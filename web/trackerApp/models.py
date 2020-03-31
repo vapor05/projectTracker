@@ -75,8 +75,8 @@ class Project(db.Model):
         db.session.commit()
 
     @classmethod
-    def find_by_title(cls, title):
-        return cls.query.filter_by(title=title).first()
+    def find_by_title(cls, title, user_id):
+        return cls.query.filter(cls.title==title, cls.author_id==user_id).first()
 
 
 class Task(db.Model):
@@ -108,5 +108,5 @@ class Task(db.Model):
         db.session.commit()
 
     @classmethod
-    def find_by_title(cls, title):
-        return cls.query.filter_by(title=title).first()
+    def find_by_title(cls, title, user_id):
+        return cls.query.filter(cls.title==title, cls.author_id==user_id).first()

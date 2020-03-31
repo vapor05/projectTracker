@@ -13,8 +13,8 @@ def add_task(project_title):
 
     if form.validate_on_submit():
 
-        if Task.find_by_title(form.title.data) == None:
-            project = Project.find_by_title(project_title)
+        if Task.find_by_title(form.title.data, user_id=current_user.user_id) == None:
+            project = Project.find_by_title(project_title, user_id=current_user.user_id)
             task = Task(title=form.title.data, description=form.description.data,
                 project_id=project.project_id, user_id=current_user.user_id)
             task.save_to_db()
@@ -25,5 +25,5 @@ def add_task(project_title):
 
 @tasks.route("/task_overview/<title>", methods=["GET", "POST"])
 def overview(title):
-    task = Task.find_by_title(title)
+    task = Task.find_by_title(title, current_user.user_id)
     return render_template("tasks/overview.html", task=task)
