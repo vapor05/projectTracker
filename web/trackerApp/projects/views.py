@@ -21,8 +21,8 @@ def create_project():
             return redirect(url_for("users.home"))
     return render_template("projects/create.html", form=form)
 
-@projects.route("/project_overview/<title>")
+@projects.route("/project_overview/<title>", methods=["GET", "POST"])
 @login_required
-def project_overview(title):
+def overview(title):
     project = Project.find_by_title(title)
-    return render_template("projects/project_overview.html", project=project)
+    return render_template("projects/overview.html", project=project)

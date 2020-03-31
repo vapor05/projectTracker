@@ -1,7 +1,7 @@
 import unittest
 
 from trackerApp import app, db
-from trackerApp.models import User, Project
+from trackerApp.models import User, Project, Task
 from trackerApp.tests.BaseTest import BaseTest
 
 class ModelTests(BaseTest, unittest.TestCase):
@@ -25,3 +25,16 @@ class ModelTests(BaseTest, unittest.TestCase):
         project = Project.find_by_title("test_project")
         self.assertEquals(project.project_id, 1)
         self.assertEquals(project.description, "A test project")
+        self.assertEquals(project.status_id, 1)
+
+    def test_task(self):
+        self.create_user(user_name="testuser", email="test@test.com", password="testpass")
+        self.create_project(title="test_project", description="A test project",
+            user_id=1)
+        self.create_task(title="test_task", description="A test task", project_id=1,
+            user_id=1)
+
+        task = Task.find_by_title("test_task")
+        self.assertEquals(task.task_id, 1)
+        self.assertEquals(task.description, "A test task")
+        self.assertEquals(task.status_id, 1)

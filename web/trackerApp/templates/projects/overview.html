@@ -9,10 +9,13 @@
     <p>{{ project.description }}</p>
     <br>
     <p>Project Tasks</p>
+    <form action="{{ url_for('tasks.add_task', project_title=project.title) }}" method="GET">
+        <input type="submit" value="Add a new Task">
+    </form>
     {% for task in project.tasks %}
         <ul>
             {{ task.title}}
-            <form action="#" method="GET">
+            <form action="{{ url_for('tasks.overview', title=task.title) }}" method="GET">
                 <input type="submit" value="See Task Detail">
             </form>
         </ul>

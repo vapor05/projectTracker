@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<div>
+    <h1>Task Overview</h1>
+    <h2>{{ task.title }}</h2>
+    <h3>Status: {{ task.status.status_code}}</h3>
+    <h3>Description</h3>
+    <p>{{ task.description }}</p>
+    <br>
+    <p>Task Work Items</p>
+    <form action="#" method="GET">
+        <input type="submit" value="Add a new Item">
+    </form>
+    {% for item in task.items %}
+        <ul>
+            {{ item.title }}
+            <form action="#" method="GET">
+                <input type="submit" value="See Item Detail">
+            </form>
+        </ul>
+    {% endfor %}
+    <br>
+    <p>Task Created On: {{ task.create_date }}</p>
+</div>
+<br>
+<div>
+    <form action="{{ url_for('projects.overview', title=task.project.title) }}" method="GET">
+        <input type="submit" value="Back to Project Overview">
+    </form>
+    <form action="{{ url_for('users.home') }}" method="GET">
+        <input type="submit" value="Back to home">
+    </form>
+</div>
+
+{% endblock %}

@@ -50,7 +50,7 @@ class Status(db.Model):
 class Project(db.Model):
     __tablename__ = "projects"
 
-    users = db.relationship(User)
+    user = db.relationship(User)
     status = db.relationship(Status)
 
     project_id = db.Column(db.Integer, primary_key=True)
@@ -82,8 +82,8 @@ class Project(db.Model):
 class Task(db.Model):
     __tablename__ = "tasks"
 
-    projects = db.relationship(Project)
-    users = db.relationship(User)
+    project = db.relationship(Project)
+    user = db.relationship(User)
     status = db.relationship(Status)
 
     task_id = db.Column(db.Integer, primary_key=True)

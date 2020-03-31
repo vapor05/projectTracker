@@ -19,6 +19,11 @@ def add_task(project_title):
                 project_id=project.project_id, user_id=current_user.user_id)
             task.save_to_db()
 
-        return redirect(url_for("projects.project_overview", title=project_title))
+        return redirect(url_for("projects.overview", title=project_title))
 
     return render_template("tasks/add.html", form=form, project_title=project_title)
+
+@tasks.route("/task_overview/<title>", methods=["GET", "POST"])
+def overview(title):
+    task = Task.find_by_title(title)
+    return render_template("tasks/overview.html", task=task)
