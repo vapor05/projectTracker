@@ -73,6 +73,7 @@ class Project(db.Model, WorkLevel):
     create_date  = db.Column(db.DateTime, default=datetime.utcnow)
 
     tasks = db.relationship("Task", backref="tasks", lazy=True)
+    comments = db.relationship("ProjectComment", backref="comments", lazy=True)
 
     def __init__(self, title, description, user_id):
         self.title = title
@@ -132,3 +133,24 @@ class Item(db.Model, WorkLevel):
         self.author_id = user_id
         # new items always start as 'Proposed'
         self.status_id = 1
+
+class ProjectComment(db.Model):
+    __tablename__ = "project_comments"
+
+    project = db.relationship(Project)
+    user = db.relationship(User)
+
+    project_comment_id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, db.ForeignKey("projects.project_id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    comment_text = db.Column(db.Text)
+    create_date  = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, project_id, user_id, comment_text):
+        self.project_id = project_id
+        self.author_id = user_id
+        self.comment_text = comment_text
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()

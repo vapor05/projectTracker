@@ -23,9 +23,11 @@ from trackerApp.users.views import users
 from trackerApp.projects.views import projects
 from trackerApp.tasks.views import tasks
 from trackerApp.items.views import items
+from trackerApp.comments.views import comments
 
 app.register_blueprint(core)
 app.register_blueprint(users)
 app.register_blueprint(projects)
 app.register_blueprint(tasks)
 app.register_blueprint(items)
+app.register_blueprint(comments)

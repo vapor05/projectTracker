@@ -6,6 +6,7 @@ from trackerApp.tests.test_models import ModelTests
 from trackerApp.tests.test_project_views import ProjectViewTests
 from trackerApp.tests.test_task_views import TaskViewTests
 from trackerApp.tests.test_item_views import ItemViewTests
+from trackerApp.tests.test_comment_views import CommentViewTests
 
 def suite():
     suite = unittest.TestSuite()
@@ -25,6 +26,8 @@ def suite():
     suite.addTest(TaskViewTests("test_add_task"))
 
     suite.addTest(ItemViewTests("test_add_item"))
+
+    suite.addTest(CommentViewTests("test_add_project_comment"))
 
     return suite
 
