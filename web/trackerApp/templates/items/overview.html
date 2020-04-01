@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<div>
+    <h1>Item Overview</h1>
+    <h2>{{ item.title }}</h2>
+    <h3>Status: {{ item.status.status_code }}</h3>
+    <h3>Description</h3>
+    <p>{{ item.description }}</p>
+    <br>
+    <p>Item Created On: {{ item.create_date }}</p>
+</div>
+<br>
+<div>
+    <form action="{{ url_for('tasks.overview', title=item.task.title) }}" method="GET">
+        <input type="submit" value="Back to Task Overview">
+    </form>
+    <form action="{{ url_for('projects.overview', title=item.task.project.title) }}" method="GET">
+        <input type="submit" value="Back to Project Overview">
+    </form>
+</div>
+
+{% endblock %}

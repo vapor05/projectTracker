@@ -4,7 +4,7 @@
 <div>
     <h1>Task Overview</h1>
     <h2>{{ task.title }}</h2>
-    <h3>Status: {{ task.status.status_code}}</h3>
+    <h3>Status: {{ task.status.status_code }}</h3>
     <h3>Description</h3>
     <p>{{ task.description }}</p>
     <br>
@@ -15,7 +15,7 @@
     {% for item in task.items %}
         <ul>
             {{ item.title }}
-            <form action="#" method="GET">
+            <form action="{{ url_for('items.overview', item_title=item.title) }}" method="GET">
                 <input type="submit" value="See Item Detail">
             </form>
         </ul>

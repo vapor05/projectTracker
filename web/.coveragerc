@@ -1,0 +1,6 @@
+[run]
+source = trackerApp/
+omit = *tests*,*__init__.py
+
+[report]
+omit = *tests*,*__init__.py
