@@ -2,7 +2,7 @@
 {% block content %}
 
 <div>
-    <h1>Fill in the below form to add a note to the project {{ project_title }}</h1>
+    <h1>Fill in the below form to add a note to {{ title }}</h1>
     <br>
     <form method="POST">
         {{ form.hidden_tag() }}

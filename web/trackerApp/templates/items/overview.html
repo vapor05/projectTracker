@@ -8,6 +8,17 @@
     <h3>Description</h3>
     <p>{{ item.description }}</p>
     <br>
+    <h3>Item Notes</h3>
+    <form action="{{ url_for('comments.add_item_comment', item_title=item.title) }}" method="GET">
+        <input type="submit" value="Add a new Note">
+    </form>
+    {% for note in item.comments %}
+        <ul>
+            Written By: {{ note.user.user_name}} <br>
+            Note: {{ note.comment_text }}
+        </ul>
+    {% endfor %}
+    <br>
     <p>Item Created On: {{ item.create_date }}</p>
 </div>
 <br>

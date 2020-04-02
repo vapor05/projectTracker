@@ -28,6 +28,8 @@ def suite():
     suite.addTest(ItemViewTests("test_add_item"))
 
     suite.addTest(CommentViewTests("test_add_project_comment"))
+    suite.addTest(CommentViewTests("test_add_task_comment"))
+    suite.addTest(CommentViewTests("test_add_item_comment"))
 
     return suite
 

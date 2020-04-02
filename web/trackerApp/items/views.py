@@ -24,8 +24,8 @@ def add(task_title):
     return render_template("items/add.html", form=form, task_title=task_title)
 
 
-@items.route("/item_overview/<item_title>", methods=["GET", "POST"])
+@items.route("/item_overview/<title>", methods=["GET", "POST"])
 @login_required
-def overview(item_title):
-    item = Item.find_by_title(item_title, current_user.user_id)
+def overview(title):
+    item = Item.find_by_title(title, current_user.user_id)
     return render_template("items/overview.html", item=item)

@@ -7,7 +7,14 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(user_id)
 
-class User(db.Model, UserMixin):
+class BaseModel():
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+class User(db.Model, UserMixin, BaseModel):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, primary_key=True)
@@ -30,10 +37,6 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.user_id
 
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
 
 class Status(db.Model):
     __tablename__ = "status"
@@ -47,11 +50,7 @@ class Status(db.Model):
     projects = db.relationship("Project", backref="status_group", lazy=True)
 
 
-class WorkLevel():
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
+class WorkLevel(BaseModel):
 
     @classmethod
     def find_by_title(cls, title, user_id):
@@ -100,6 +99,7 @@ class Task(db.Model, WorkLevel):
     create_date  = db.Column(db.DateTime, default=datetime.utcnow)
 
     items = db.relationship("Item", backref="items", lazy=True)
+    comments = db.relationship("TaskComment", backref="comments", lazy=True)
 
     def __init__(self, title, description, project_id, user_id):
         self.title = title
@@ -126,6 +126,8 @@ class Item(db.Model, WorkLevel):
     description = db.Column(db.Text)
     create_date  = db.Column(db.DateTime, default=datetime.utcnow)
 
+    comments = db.relationship("ItemComment", backref="comments", lazy=True)
+
     def __init__(self, title, description, task_id, user_id):
         self.title = title
         self.description = description
@@ -134,7 +136,7 @@ class Item(db.Model, WorkLevel):
         # new items always start as 'Proposed'
         self.status_id = 1
 
-class ProjectComment(db.Model):
+class ProjectComment(db.Model, BaseModel):
     __tablename__ = "project_comments"
 
     project = db.relationship(Project)
@@ -151,6 +153,37 @@ class ProjectComment(db.Model):
         self.author_id = user_id
         self.comment_text = comment_text
 
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
+class TaskComment(db.Model, BaseModel):
+    __tablename__ = "task_comments"
+
+    task = db.relationship(Task)
+    user = db.relationship(User)
+
+    task_comment_id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey("tasks.task_id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    comment_text = db.Column(db.Text)
+    create_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, task_id, user_id, comment_text):
+        self.task_id = task_id
+        self.author_id = user_id
+        self.comment_text = comment_text
+
+
+class ItemComment(db.Model, BaseModel):
+    __tablename__ = "item_comments"
+
+    item = db.relationship(Item)
+    user = db.relationship(User)
+
+    item_comment_id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey("items.item_id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    comment_text = db.Column(db.Text)
+    create_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, item_id, user_id, comment_text):
+        self.item_id = item_id
+        self.author_id = user_id
+        self.comment_text = comment_text

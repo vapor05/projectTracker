@@ -2,7 +2,7 @@ import os
 import unittest
 
 from trackerApp import app, db
-from trackerApp.models import User, Project, Task
+from trackerApp.models import User, Project, Task, Item
 
 TEST_DB = 'test.db'
 
@@ -38,6 +38,11 @@ class BaseTest(unittest.TestCase):
         task = Task(title=title, description=description, project_id=project_id,
             user_id=user_id)
         task.save_to_db()
+
+    def create_item(self, title, description, task_id, user_id):
+        item = Item(title=title, description=description, task_id=task_id,
+            user_id=user_id)
+        item.save_to_db()
 
     def register_user(self, user_name, email, password):
         return self.app.post("/register", data=dict(user_name=user_name,

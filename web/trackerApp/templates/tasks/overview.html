@@ -8,6 +8,17 @@
     <h3>Description</h3>
     <p>{{ task.description }}</p>
     <br>
+    <h3>Task Notes</h3>
+    <form action="{{ url_for('comments.add_task_comment', task_title=task.title) }}" method="GET">
+        <input type="submit" value="Add a new Note">
+    </form>
+    {% for note in task.comments %}
+        <ul>
+            Written By: {{ note.user.user_name}} <br>
+            Note: {{ note.comment_text }}
+        </ul>
+    {% endfor %}
+    <br>
     <p>Task Work Items</p>
     <form action="{{ url_for('items.add', task_title=task.title) }}" method="GET">
         <input type="submit" value="Add a new Item">
@@ -15,7 +26,7 @@
     {% for item in task.items %}
         <ul>
             {{ item.title }}
-            <form action="{{ url_for('items.overview', item_title=item.title) }}" method="GET">
+            <form action="{{ url_for('items.overview', title=item.title) }}" method="GET">
                 <input type="submit" value="See Item Detail">
             </form>
         </ul>
