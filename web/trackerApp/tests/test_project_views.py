@@ -22,7 +22,7 @@ class ProjectViewTests(BaseTest, unittest.TestCase):
         response = self.login_user("test@test.com", "testpass")
         response = self.app.get("/create_project", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Fill in the below form to start a new project', response.data)
+        self.assertIn(b'Fill in the below form to start a new Project', response.data)
         # logged in user should land on home page with project now in list
         response = self.start_project("test_project", "A test project")
         self.assertEqual(response.status_code, 200)

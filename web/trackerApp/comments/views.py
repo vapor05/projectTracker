@@ -54,7 +54,7 @@ def add_task_comment(task_title):
     return render_template("comments/add.html", form=form, title=task_title,
         action="create")
 
-@comments.route("/task_note/<int:id>", methods=["GET", "POST"])
+@comments.route("/task_note/<int:id>/update", methods=["GET", "POST"])
 @login_required
 def update_task_comment(id):
     form = AddCommentForm()
@@ -71,7 +71,7 @@ def update_task_comment(id):
     return render_template("comments/add.html", form=form, title=comment.task.title,
         action="update")
 
-@comments.route("/add_item_note/<item_title>/update", methods=["GET", "POST"])
+@comments.route("/add_item_note/<item_title>", methods=["GET", "POST"])
 @login_required
 def add_item_comment(item_title):
     form = AddCommentForm()
