@@ -19,7 +19,7 @@ def add(task_title):
                 task_id=task.task_id, user_id=current_user.user_id)
             item.save_to_db()
 
-        return redirect(url_for("tasks.overview", title=task_title))
+        return redirect(url_for("items.overview", title=item.title))
 
     return render_template("items/add.html", form=form, task_title=task_title,
         action="create")
@@ -42,7 +42,7 @@ def update(title):
         item.title = form.title.data
         item.description = form.description.data
         item.save_to_db()
-        return redirect(url_for("tasks.overview", title=item.task.title))
+        return redirect(url_for("items.overview", title=item.title))
     elif request.method == "GET":
         form.title.data = title
         form.description.data = item.description

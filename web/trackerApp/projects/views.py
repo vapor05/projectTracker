@@ -18,7 +18,7 @@ def create_project():
             project = Project(title = form.title.data,
                 description = form.description.data, user_id = current_user.user_id)
             project.save_to_db()
-            return redirect(url_for("users.home"))
+            return redirect(url_for("projects.overview", title=project.title))
     return render_template("projects/create.html", form=form, action="create")
 
 @projects.route("/project_overview/<title>", methods=["GET", "POST"])
@@ -38,7 +38,7 @@ def update(title):
         project.title = form.title.data
         project.description = form.description.data
         project.save_to_db()
-        return redirect(url_for("users.home"))
+        return redirect(url_for("projects.overview", title=project.title))
     elif request.method == "GET":
         form.title.data = title
         form.description.data = project.description

@@ -22,14 +22,20 @@ def suite():
     suite.addTest(ModelTests("test_task"))
 
     suite.addTest(ProjectViewTests("test_create_project"))
+    suite.addTest(ProjectViewTests("test_update_project"))
 
     suite.addTest(TaskViewTests("test_add_task"))
+    suite.addTest(TaskViewTests("test_update_task"))
 
     suite.addTest(ItemViewTests("test_add_item"))
+    suite.addTest(ItemViewTests("test_update_item"))
 
     suite.addTest(CommentViewTests("test_add_project_comment"))
     suite.addTest(CommentViewTests("test_add_task_comment"))
     suite.addTest(CommentViewTests("test_add_item_comment"))
+    suite.addTest(CommentViewTests("test_update_project_comment"))
+    suite.addTest(CommentViewTests("test_update_task_comment"))
+    suite.addTest(CommentViewTests("test_update_item_comment"))
 
     return suite
 
