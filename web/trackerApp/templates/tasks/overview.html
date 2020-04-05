@@ -7,6 +7,9 @@
     <h3>Status: {{ task.status.status_code }}</h3>
     <h3>Description</h3>
     <p>{{ task.description }}</p>
+    <form action="{{ url_for('tasks.update',title=task.title) }}" method="GET">
+        <input type="submit" value="Update Task">
+    </form>
     <br>
     <h3>Task Notes</h3>
     <form action="{{ url_for('comments.add_task_comment', task_title=task.title) }}" method="GET">

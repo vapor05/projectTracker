@@ -7,6 +7,9 @@
     <h3>Status: {{ project.status.status_code }}</h3>
     <h3>Project Description:</h3>
     <p>{{ project.description }}</p>
+    <form action="{{ url_for('projects.update',title=project.title) }}" method="GET">
+        <input type="submit" value="Update Project">
+    </form>
     <br>
     <h3>Project Notes</h3>
     <form action="{{ url_for('comments.add_project_comment', project_title=project.title) }}" method="GET">

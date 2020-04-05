@@ -7,6 +7,9 @@
     <h3>Status: {{ item.status.status_code }}</h3>
     <h3>Description</h3>
     <p>{{ item.description }}</p>
+    <form action="{{ url_for('items.update',title=item.title) }}" method="GET">
+        <input type="submit" value="Update Item">
+    </form>
     <br>
     <h3>Item Notes</h3>
     <form action="{{ url_for('comments.add_item_comment', item_title=item.title) }}" method="GET">

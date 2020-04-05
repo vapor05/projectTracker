@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, redirect, url_for
+from flask import render_template, Blueprint, redirect, url_for, request
 from flask_login import login_required, current_user
 
 from trackerApp.models import Item, Task
@@ -21,7 +21,8 @@ def add(task_title):
 
         return redirect(url_for("tasks.overview", title=task_title))
 
-    return render_template("items/add.html", form=form, task_title=task_title)
+    return render_template("items/add.html", form=form, task_title=task_title,
+        action="create")
 
 
 @items.route("/item_overview/<title>", methods=["GET", "POST"])
@@ -29,3 +30,22 @@ def add(task_title):
 def overview(title):
     item = Item.find_by_title(title, current_user.user_id)
     return render_template("items/overview.html", item=item)
+
+@items.route("/item/<title>/update", methods=["GET", "POST"])
+@login_required
+def update(title):
+    form = AddItemForm()
+    form.submit.label.text = "Update"
+    item = Item.find_by_title(title, current_user.user_id)
+
+    if form.validate_on_submit():
+        item.title = form.title.data
+        item.description = form.description.data
+        item.save_to_db()
+        return redirect(url_for("tasks.overview", title=item.task.title))
+    elif request.method == "GET":
+        form.title.data = title
+        form.description.data = item.description
+
+    return render_template("items/add.html", form=form, task_title=item.task.title,
+        action="update")
