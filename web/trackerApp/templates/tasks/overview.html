@@ -19,6 +19,9 @@
         <ul>
             Written By: {{ note.user.user_name}} <br>
             Note: {{ note.comment_text }}
+            <form action="{{ url_for('comments.update_task_comment', id=note.task_comment_id) }}" method="GET">
+                <input type="submit" value="Edit Note">
+            </form>
         </ul>
     {% endfor %}
     <br>

@@ -2,7 +2,11 @@
 {% block content %}
 
 <div>
-    <h1>Fill in the below form to add a note to {{ title }}</h1>
+    {% if action == 'create' %}
+        <h1>Fill in the below form to add a note to {{ title }}</h1>
+    {% elif action == 'update' %}
+        <h1>Update this Note</h1>
+    {% endif %}
     <br>
     <form method="POST">
         {{ form.hidden_tag() }}

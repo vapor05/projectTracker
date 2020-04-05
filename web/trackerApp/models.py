@@ -153,6 +153,11 @@ class ProjectComment(db.Model, BaseModel):
         self.author_id = user_id
         self.comment_text = comment_text
 
+    @classmethod
+    def find_by_id(cls, project_comment_id, user_id):
+        return cls.query.filter(cls.project_comment_id==project_comment_id,
+            cls.author_id==user_id).first()
+
 class TaskComment(db.Model, BaseModel):
     __tablename__ = "task_comments"
 
@@ -169,6 +174,11 @@ class TaskComment(db.Model, BaseModel):
         self.task_id = task_id
         self.author_id = user_id
         self.comment_text = comment_text
+
+    @classmethod
+    def find_by_id(cls, task_comment_id, user_id):
+        return cls.query.filter(cls.task_comment_id==task_comment_id,
+            cls.author_id==user_id).first()
 
 
 class ItemComment(db.Model, BaseModel):
@@ -187,3 +197,8 @@ class ItemComment(db.Model, BaseModel):
         self.item_id = item_id
         self.author_id = user_id
         self.comment_text = comment_text
+
+    @classmethod
+    def find_by_id(cls, item_comment_id, user_id):
+        return cls.query.filter(cls.item_comment_id==item_comment_id,
+            cls.author_id==user_id).first()
