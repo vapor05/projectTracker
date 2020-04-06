@@ -20,15 +20,21 @@ def suite():
     suite.addTest(ModelTests("test_user"))
     suite.addTest(ModelTests("test_project"))
     suite.addTest(ModelTests("test_task"))
+    suite.addTest(ModelTests("test_project_delete"))
+    suite.addTest(ModelTests("test_task_delete"))
+    suite.addTest(ModelTests("test_item_delete"))
 
     suite.addTest(ProjectViewTests("test_create_project"))
     suite.addTest(ProjectViewTests("test_update_project"))
+    suite.addTest(ProjectViewTests("test_delete_project"))
 
     suite.addTest(TaskViewTests("test_add_task"))
     suite.addTest(TaskViewTests("test_update_task"))
+    suite.addTest(TaskViewTests("test_delete_task"))
 
     suite.addTest(ItemViewTests("test_add_item"))
     suite.addTest(ItemViewTests("test_update_item"))
+    suite.addTest(ItemViewTests("test_delete_item"))
 
     suite.addTest(CommentViewTests("test_add_project_comment"))
     suite.addTest(CommentViewTests("test_add_task_comment"))

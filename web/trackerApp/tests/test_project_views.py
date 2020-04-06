@@ -17,6 +17,9 @@ class ProjectViewTests(BaseTest, unittest.TestCase):
         return self.app.post("/project/"+project.title+"/update", follow_redirects=True,
             data=dict(title=title, description=description))
 
+    def delete_project(self, title):
+        return self.app.get("/project/"+title+"/delete", follow_redirects=True)
+
     def test_create_project(self):
         self.create_user(user_name="testuser", email="test@test.com", password="testpass")
         # not logged in user should be redirected to login page
@@ -59,3 +62,16 @@ class ProjectViewTests(BaseTest, unittest.TestCase):
         self.assertIn(b'Project Overview', response.data)
         self.assertIn(b'test_UPDATE_project', response.data)
         self.assertIn(b'A test update', response.data)
+
+    def test_delete_project(self):
+        self.create_user("testuser", "test@test.com", "testpass")
+        self.create_project("test_project", "Project Test", 1)
+        # not logged in user should be redirected to login page
+        response = self.delete_project("test_project")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Log In', response.data)
+        # logged in user should delete project and land on home page
+        response = self.login_user("test@test.com", "testpass")
+        response = self.delete_project("test_project")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(b'test_project', response.data)

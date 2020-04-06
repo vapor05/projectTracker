@@ -13,6 +13,10 @@ class BaseModel():
         db.session.add(self)
         db.session.commit()
 
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 class User(db.Model, UserMixin, BaseModel):
     __tablename__ = "users"
@@ -56,6 +60,10 @@ class WorkLevel(BaseModel):
     def find_by_title(cls, title, user_id):
         return cls.query.filter(cls.title==title, cls.author_id==user_id).first()
 
+    def delete_comments(self, comments):
+        for comment in comments:
+            comment.delete_from_db()
+
 
 class Project(db.Model, WorkLevel):
     __tablename__ = "projects"
@@ -64,7 +72,7 @@ class Project(db.Model, WorkLevel):
     status = db.relationship(Status)
 
     project_id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False )
     assigned_id = db.Column(db.Integer)
     status_id = db.Column(db.Integer, db.ForeignKey("status.status_id"), nullable=False)
     title = db.Column(db.String(200))
@@ -80,6 +88,15 @@ class Project(db.Model, WorkLevel):
         self.author_id = user_id
         # new projects always start as 'Proposed'
         self.status_id = 1
+
+    def delete(self):
+        self.delete_comments(self.comments)
+        tasks = self.tasks
+
+        for task in tasks:
+            task.delete()
+
+        self.delete_from_db()
 
 
 class Task(db.Model, WorkLevel):
@@ -109,6 +126,15 @@ class Task(db.Model, WorkLevel):
         # new tasks always start as 'Proposed'
         self.status_id = 1
 
+    def delete(self):
+        self.delete_comments(self.comments)
+        items = self.items
+
+        for item in items:
+            item.delete()
+
+        self.delete_from_db()
+
 
 class Item(db.Model, WorkLevel):
     __tablename__ = "items"
@@ -135,6 +161,10 @@ class Item(db.Model, WorkLevel):
         self.author_id = user_id
         # new items always start as 'Proposed'
         self.status_id = 1
+
+    def delete(self):
+        self.delete_comments(self.comments)
+        self.delete_from_db()
 
 class ProjectComment(db.Model, BaseModel):
     __tablename__ = "project_comments"

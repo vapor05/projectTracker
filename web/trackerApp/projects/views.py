@@ -44,3 +44,10 @@ def update(title):
         form.description.data = project.description
 
     return render_template("projects/create.html", form=form, action="update")
+
+@projects.route("/project/<title>/delete", methods=["GET", "POST"])
+@login_required
+def delete(title):
+    project = Project.find_by_title(title, current_user.user_id)
+    project.delete()
+    return redirect(url_for("users.home"))

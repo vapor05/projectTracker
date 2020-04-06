@@ -25,16 +25,6 @@ class CommentViewTests(BaseTest):
         return self.app.post(url+"/"+str(id)+"/update", data=dict(comment=comment),
             follow_redirects=True)
 
-    def create_comment(self, type, comment_text, id, author_id):
-        if type=="project":
-            comment = ProjectComment(id, author_id, comment_text)
-        elif type=="task":
-            comment = TaskComment(id, author_id, comment_text)
-        elif type=="item":
-            comment = ItemComment(id, author_id, comment_text)
-
-        comment.save_to_db()
-
     def test_add_project_comment(self):
         self.create_user("testuser", "test@test.com", "testpass")
         self.create_project("test_project", "Project Test", 1)

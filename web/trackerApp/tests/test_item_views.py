@@ -16,6 +16,9 @@ class ItemViewTests(BaseTest):
         return self.app.post("/item/"+item.title+"/update", data=dict(title=title,
             description=description), follow_redirects=True)
 
+    def delete_item(self, title):
+        return self.app.get("/item/"+title+"/delete", follow_redirects=True)
+
     def test_add_item(self):
         self.create_user("testuser", "test@test.com", "testpass")
         self.create_project("test_project", "Project Test", 1)
@@ -61,3 +64,18 @@ class ItemViewTests(BaseTest):
         self.assertIn(b'Item Overview', response.data)
         self.assertIn(b'test_UPDATE_item', response.data)
         self.assertIn(b'Item UPDATE Test', response.data)
+
+    def test_delete_item(self):
+        self.create_user("testuser", "test@test.com", "testpass")
+        self.create_project("test_project", "Project Test", 1)
+        self.create_task("test_task", "Test Task", 1, 1)
+        self.create_item("test_item", "Item Test", 1, 1)
+        # not logged in user should be redirected to login page
+        response = self.delete_item("test_item")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Log In', response.data)
+        # logged in user should delete project and land on home page
+        response = self.login_user("test@test.com", "testpass")
+        response = self.delete_item("test_item")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(b'test_item', response.data)

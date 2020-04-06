@@ -16,6 +16,9 @@ class TaskViewTests(BaseTest, unittest.TestCase):
         return self.app.post("task/"+task.title+"/update", data=dict(title=title,
             description=description), follow_redirects=True)
 
+    def delete_task(self, title):
+        return self.app.get("/task/"+title+"/delete", follow_redirects=True)
+
     def test_add_task(self):
         self.create_user("testuser", "test@test.com", "testpass")
         self.create_project("test_project", "Project Test", 1)
@@ -60,3 +63,17 @@ class TaskViewTests(BaseTest, unittest.TestCase):
         self.assertIn(b'Task Overview', response.data)
         self.assertIn(b'test_UPDATE_task', response.data)
         self.assertIn(b'Task Test UPDATE', response.data)
+
+    def test_delete_task(self):
+        self.create_user("testuser", "test@test.com", "testpass")
+        self.create_project("test_project", "Project Test", 1)
+        self.create_task("test_task", "Test Task", 1, 1)
+        # not logged in user should be redirected to login page
+        response = self.delete_task("test_task")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Log In', response.data)
+        # logged in user should delete project and land on home page
+        response = self.login_user("test@test.com", "testpass")
+        response = self.delete_task("test_task")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(b'test_task', response.data)

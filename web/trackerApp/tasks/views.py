@@ -48,3 +48,11 @@ def update(title):
 
     return render_template("tasks/add.html", form=form, project_title=task.project.title,
         action="update")
+
+@tasks.route("/task/<title>/delete", methods=["GET", "POST"])
+@login_required
+def delete(title):
+    task = Task.find_by_title(title, current_user.user_id)
+    project = task.project
+    task.delete()
+    return redirect(url_for("projects.overview", title=project.title))
